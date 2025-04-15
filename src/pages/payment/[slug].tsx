@@ -1,6 +1,6 @@
 import { GetStaticProps, GetStaticPaths } from 'next';
 import { zodResolver } from "@hookform/resolvers/zod"
-import { set, useForm } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { cpf as cpfValidator } from "cpf-cnpj-validator";
 import { QRCodeSVG } from 'qrcode.react';
@@ -22,7 +22,6 @@ import { IoCard } from "react-icons/io5";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -111,19 +110,19 @@ export default function Payment({ group }: GroupProps) {
       plan: selectedPlan,
       fullName: data.fullName,
       cpf: (data.cpf).replaceAll(".", "").replaceAll("-", "")
-    }).then((result) => {
+    }).then((result: any) => {
       // console.log(result);
       setResponsePaymentData(result.data);
       setPixCopiaCola(result.data.pixCopiaECola);
       startPIXInterval();
-    }).catch((err) => {
+    }).catch((err: any) => {
       console.log(err);
     })
     setPaymentPIXOpen(true);
   }
 
   function verifyPayment() {
-    api.get(`/payment/${responsePaymentData.txid}`).then((result) => {
+    api.get(`/payment/${responsePaymentData.txid}`).then((result: any) => {
       if(result.data.status == "CONCLUIDA") {
         toast.success("Pagamento realizado com sucesso!");
         setPaymentPIXOpen(false);
@@ -137,7 +136,7 @@ export default function Payment({ group }: GroupProps) {
   }
 
   function autoVerifyPayment() {
-    api.get(`/payment/${responsePaymentData.txid}`).then((result) => {
+    api.get(`/payment/${responsePaymentData.txid}`).then((result: any) => {
       if(result.data.status == "CONCLUIDA") {
         toast.success("Pagamento realizado com sucesso!");
         setPaymentPIXOpen(false);
@@ -153,7 +152,7 @@ export default function Payment({ group }: GroupProps) {
         .then(() => {
           toast.success("Copiado com sucesso para a area de transferência!");
         })
-        .catch(err => {
+        .catch((err: any) => {
           console.error("Erro ao copiar com clipboard API:", err);
           fallbackCopy(value);
         });
@@ -360,7 +359,7 @@ export default function Payment({ group }: GroupProps) {
 }
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const { data } = await api.get('/groups', {
+  const { data } = await api.get<Group[]>('/groups', {
     params: {
       _limit: 2,
       _sort: 'published_at',

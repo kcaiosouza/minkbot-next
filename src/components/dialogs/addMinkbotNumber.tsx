@@ -21,7 +21,7 @@ import {
 } from "@/components/ui/drawer"
 
 export default function AddMinkbotNumber({label, title, description, children}: any) {
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState<boolean>(false)
   const isDesktop = useMediaQuery("(min-width: 768px)")
 
   if (isDesktop) {
