@@ -1,4 +1,4 @@
-import Image from "next/image";
+// import Image from "next/image";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -57,7 +57,7 @@ END:VCARD
         </div>
       </div>
       <div className="w-[192px] h-[192px] flex items-center justify-center">
-        <Image className="animate-bounce" draggable={false} src="/minkbot.png" alt="MinkBot Logo" width={192} height={192} />
+        <img className="animate-bounce" draggable={false} src="/minkbot.png" alt="MinkBot Logo" width={192} height={192} />
       </div>
 
     </div>

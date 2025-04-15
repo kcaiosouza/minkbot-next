@@ -34,7 +34,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import Image from 'next/image';
+// import Image from 'next/image';
 import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import CPFInput from '@/components/ui/cpfInput';
@@ -235,7 +235,7 @@ export default function Payment({ group }: GroupProps) {
             />
             { selectedPlan && (
               <div className='bg-gradient-to-br from-[#142F54] to-[#3B67A4] w-full min-h-[132px] rounded-3xl relative overflow-hidden'>
-                <Image src="/minkhead.png" alt="Minkbot Head" width={120} height={120} className='absolute top-0 -right-6 -translate-x-2 -translate-y-4' />
+                <img src="/minkhead.png" alt="Minkbot Head" width={120} height={120} className='absolute top-0 -right-6 -translate-x-2 -translate-y-4' />
                 <div className='flex flex-col justify-center gap-6 p-4'>
                   <div className='bg-[#3B67A4] max-w-fit px-3 rounded-md'>
                     <span className='font-bold text-white text-4xl'><span className='text-sm'>R$ </span>{selectedPlan == "1" ? "9,99" : "39,99"}</span>
