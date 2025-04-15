@@ -1,115 +1,65 @@
 import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
+import { toast } from "sonner";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Toaster } from "@/components/ui/sonner";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import AddMinkbotNumber from "@/components/dialogs/addMinkbotNumber";
 
 export default function Home() {
+  const handleDownload = () => {
+    const vCard = `
+BEGIN:VCARD
+VERSION:3.0
+FN:MinkBot
+TEL;TYPE=CELL:+55 83 99699-2365
+END:VCARD
+    `.trim();
+  
+    const blob = new Blob([vCard], { type: "text/vcard;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+  
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "minkbot.vcf";
+    a.click();
+  
+    URL.revokeObjectURL(url);
+  };
+
   return (
-    <div
-      className={`${geistSans.className} ${geistMono.className} grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]`}
-    >
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              src/pages/index.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="overflow-hidden flex items-center justify-center gap-44 h-dvh w-full p-10 bg-[url('/background_pattern.png')] bg-cover bg-center flex-col md:flex-row">
+      <div className="flex flex-col max-w-[350px]">
+        <h1 className="text-[30px] font-semibold text-[#142F54] leading-6 md:text-[36px]">Conheça o</h1>
+        <h1 className="text-[72px] font-black text-[#142F54] leading-18 md:text-[78px]">MinkBot</h1>
+        <h1 className="text-[14px] font-regular text-[#142F54] leading-5 md:text-[20px]">O assitente virtual mais completo para o seu grupo de whatsapp!</h1>
+        <div className="mt-4">
+          <AddMinkbotNumber label="Adicionar ao grupo" title="Adicione o MinkBot em seu grupo" description="Você pode acionar ele agora mesmo, você pode salvar o número dele clicando no botão abaixo ou copiando o número você mesmo.">
+            <div className="flex flex-col gap-2 w-full">
+              <Input disabled value="(83) 9 9699-2365" type="tel" />
+              <Button 
+                onClick={() => {
+                  try {
+                    navigator.clipboard.writeText("(83) 9 9699-2365")
+                      .then(() => toast.success("Número copiado com sucesso!"))
+                      .catch(() => toast.error("Erro ao copiar número!"))
+                  }
+                  catch {
+                    toast.error("Erro ao copiar número!")
+                  }
+                }}
+                className="w-full cursor-pointer">Copiar número</Button>
+              <Button onClick={handleDownload} className="w-full cursor-pointer">Adicionar</Button>
+            </div>
+          </AddMinkbotNumber>
+          <Toaster position="top-center" />
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=default-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
+      <div className="w-[192px] h-[192px] flex items-center justify-center">
+        <Image className="animate-bounce" draggable={false} src="/minkbot.png" alt="MinkBot Logo" width={192} height={192} />
+      </div>
+
     </div>
   );
 }
