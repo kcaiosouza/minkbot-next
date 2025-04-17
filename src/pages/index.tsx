@@ -1,4 +1,5 @@
 // import Image from "next/image";
+import Head from "next/head";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,9 @@ END:VCARD
 
   return (
     <div className="overflow-hidden flex items-center justify-center gap-44 h-dvh w-full p-10 bg-[url('/background_pattern.png')] bg-cover bg-center flex-col md:flex-row">
+      <Head>
+        <title>MinkBot | Mais funções para seu grupo</title>
+      </Head>
       <div className="flex flex-col max-w-[350px]">
         <h1 className="text-[30px] font-semibold text-[#142F54] leading-6 md:text-[36px]">Conheça o</h1>
         <h1 className="text-[72px] font-black text-[#142F54] leading-18 md:text-[78px]">MinkBot</h1>

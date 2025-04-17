@@ -35,15 +35,17 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 // import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
 import CPFInput from '@/components/ui/cpfInput';
 import { Textarea } from '@/components/ui/textarea';
 import ConfettiScreen from '@/components/others/confettiScreen';
+import Head from 'next/head';
 
 type Group = {
   id: string;
 	group_id: string;
+  group_name: string;
 	plan_id: number;
 	created_at: string;
   updated_at: string;
@@ -79,9 +81,12 @@ export default function Payment({ group }: GroupProps) {
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
   const [formKYCOpen, setFormKYCOpen] = useState<boolean>(false);
   const [paymentPIXOpen, setPaymentPIXOpen] = useState<boolean>(false);
+  const [isVerifyPayment, setIsVerifyPayment] = useState<boolean>(false);
   const [paymentCheckedOpen, setPaymentCheckedOpen] = useState<boolean>(false);
   const [pixCopiaCola, setPixCopiaCola] = useState<string>('');
   const [responsePaymentData, setResponsePaymentData] = useState<any>(null);
+
+  const [intervalId, setIntervalId] = useState<any>(null);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -114,9 +119,9 @@ export default function Payment({ group }: GroupProps) {
       // console.log(result);
       setResponsePaymentData(result.data);
       setPixCopiaCola(result.data.pixCopiaECola);
-      startPIXInterval();
+      setIsVerifyPayment(true);
     }).catch((err: any) => {
-      console.log(err);
+      console.error(err);
     })
     setPaymentPIXOpen(true);
   }
@@ -126,11 +131,12 @@ export default function Payment({ group }: GroupProps) {
       if(result.data.status == "CONCLUIDA") {
         toast.success("Pagamento realizado com sucesso!");
         setPaymentPIXOpen(false);
+        setIsVerifyPayment(false);
         setPaymentCheckedOpen(true);
         return
       }
       
-      console.log(result.data);
+      // console.log(result.data);
       toast.error("Pagamento ainda nao foi realizado!");
     })
   }
@@ -140,11 +146,30 @@ export default function Payment({ group }: GroupProps) {
       if(result.data.status == "CONCLUIDA") {
         toast.success("Pagamento realizado com sucesso!");
         setPaymentPIXOpen(false);
+        setIsVerifyPayment(false);
         setPaymentCheckedOpen(true);
         return
       }
     })
   }
+
+  useEffect(() => {
+    if (isVerifyPayment) {
+      let interval = setInterval(() => {
+        autoVerifyPayment();
+        // console.log("Executando enquanto isVerifyPayment === true");
+      }, 3000); // intervalo de 1 segundo (ajuste como quiser)
+      setIntervalId(interval);
+    }
+  }, [isVerifyPayment]);
+
+  useEffect(() => {
+    // console.log("paymentCheckedOpen:", paymentCheckedOpen);
+    if (intervalId) {
+      clearInterval(intervalId);
+      // console.log("Intervalo parado porque isVerifyPayment virou false");
+    }
+  }, [paymentCheckedOpen]);
 
   function copyToClipboard(value: string): void {
     if (navigator.clipboard) {
@@ -174,29 +199,14 @@ export default function Payment({ group }: GroupProps) {
     }
   }
 
-  let intervalId: ReturnType<typeof setInterval> | null = null;
-
-  function startPIXInterval() {
-    if (paymentPIXOpen && !intervalId) {
-      intervalId = setInterval(() => {
-        autoVerifyPayment();
-        console.log("Executando enquanto paymentPIXOpen === true");
-  
-        // Verifica se paymentPIXOpen virou false e cancela o intervalo
-        if (!paymentPIXOpen && intervalId) {
-          clearInterval(intervalId);
-          intervalId = null;
-          console.log("Intervalo parado porque paymentPIXOpen virou false");
-        }
-      }, 3000); // intervalo de 1 segundo (ajuste como quiser)
-    }
-  }
-
   return (
     <div className="overflow-hidden flex items-center justify-center gap-28 h-dvh w-full p-10 bg-[url('/background_pattern.png')] bg-cover bg-center flex-col md:flex-row">
       {paymentCheckedOpen && (
         <ConfettiScreen />
       )}
+      <Head>
+        <title>{group.group_name} - MinkBot</title>
+      </Head>
       <div className="flex flex-col max-w-[350px]">
         <h1 className="text-[30px] font-semibold text-[#142F54] leading-0 md:text-[28px]">+Comandos</h1>
         <h1 className="text-[30px] font-semibold text-[#142F54] leading-14 md:text-[28px]">+Diversão</h1>
@@ -388,6 +398,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
   const group = {
     id: data.id,
     group_id: data.group_id,
+    group_name: data.group_name,
     plan_id: data.plan_id,
   };
 
