@@ -27,13 +27,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 // import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { Input } from '@/components/ui/input';
@@ -56,10 +49,7 @@ type GroupProps = {
 }
 
 const FormSchema = z.object({
-  plan: z
-    .string({
-      required_error: "Por favor, escolha um plano.",
-    }),
+  cupom: z.string().nullable().optional(),
 });
 
 const KYCFormSchema = z.object({
@@ -78,7 +68,7 @@ const KYCFormSchema = z.object({
 });
 
 export default function Payment({ group }: GroupProps) {
-  const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [selectedPlan, setSelectedPlan] = useState<string | null>('1');
   const [formKYCOpen, setFormKYCOpen] = useState<boolean>(false);
   const [paymentPIXOpen, setPaymentPIXOpen] = useState<boolean>(false);
   const [isVerifyPayment, setIsVerifyPayment] = useState<boolean>(false);
@@ -101,7 +91,7 @@ export default function Payment({ group }: GroupProps) {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast.success(`Plano ${data.plan == "1" ? "PREMIUM" : "ULTIMATE"} escolhido com sucesso!`)
+    // toast.success(`Plano ${data.plan == "1" ? "PREMIUM" : "ULTIMATE"} escolhido com sucesso!`)
     // console.log(data)
   }
 
@@ -224,21 +214,20 @@ export default function Payment({ group }: GroupProps) {
           <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
             <FormField
               control={form.control}
-              name="plan"
+              name="cupom"
               render={({ field }) => (
                 <FormItem className="w-full text-[#142F54]">
-                  <FormLabel>Plano</FormLabel>
-                  <Select onValueChange={(value) => {field.onChange(value); setSelectedPlan(value)}} defaultValue={field.value}>
+                  <FormLabel>Cupom</FormLabel>
                     <FormControl className='border-2 border-[#142F54] w-full'>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Selecione um plano" />
-                      </SelectTrigger>
+                      <Input
+                        placeholder="EM BREVE"
+                        disabled
+                        onChange={(e) => {
+                          field.onChange(e.target.value);
+                          // setSelectedPlan(e.target.value);
+                        }}
+                      />
                     </FormControl>
-                    <SelectContent>
-                      <SelectItem value="1">Premium</SelectItem>
-                      <SelectItem value="2">Ultimate</SelectItem>
-                    </SelectContent>
-                  </Select>
                   <FormMessage />
                 </FormItem>
               )}
@@ -248,9 +237,9 @@ export default function Payment({ group }: GroupProps) {
                 <img src="/minkhead.png" alt="Minkbot Head" width={120} height={120} className='absolute top-0 -right-6 -translate-x-2 -translate-y-4' />
                 <div className='flex flex-col justify-center gap-6 p-4'>
                   <div className='bg-[#3B67A4] max-w-fit px-3 rounded-md'>
-                    <span className='font-bold text-white text-4xl'><span className='text-sm'>R$ </span>{selectedPlan == "1" ? "9,99" : "39,99"}</span>
+                    <span className='font-bold text-white text-4xl'><span className='text-sm'>R$ </span>14,99</span>
                   </div>
-                  <span className='text-white text-3xl'><b>MinkBot</b> {selectedPlan == "1" ? "Premium" : "Ultimate"}</span>
+                  <span className='text-white text-3xl'><b>MinkBot</b> Premium</span>
                 </div>
               </div>
             )}
