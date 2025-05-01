@@ -18,8 +18,14 @@ import {
   BiSolidMessageSquareCheck,
   BiSolidMessageSquareX,
 } from "react-icons/bi";
+import { useEffect, useState } from "react";
+import { api } from "@/services/api";
 
 export default function Home() {
+  const [statusColor, setStatusColor] = useState("white");
+  const [message, setMessage] = useState("Verificando status do MinkBot");
+  const [showLight, setShoewLight] = useState(false);
+
   const handleDownload = () => {
     const vCard = `
 BEGIN:VCARD
@@ -39,6 +45,26 @@ END:VCARD
 
     URL.revokeObjectURL(url);
   };
+
+  useEffect(() => {
+    api.get("/status")
+    .then((res) => {
+      if (res.status === 200) {
+        setStatusColor("green");
+      } else {
+        setStatusColor("red");
+      }
+      setMessage(res.data.message);
+    })
+    .catch((err) => {
+      setStatusColor("red");
+      setMessage("Servidor do MinkBot encontra-se desligado.");
+    });
+
+    setTimeout(() => {
+      setShoewLight(true);
+    }, 1300)
+  }, [])
 
   return (
     <>
@@ -69,7 +95,18 @@ END:VCARD
         />
       </Head>
       <main className="overflow-x-hidden flex items-center min-h-dvh w-full flex-col">
-        <div className="h-2 w-full bg-gradient-to-r to-[#142F54] from-[#3B67A4]"></div>
+        <div className="w-full bg-gradient-to-r to-[#142F54] from-[#3B67A4] min-h-3 px-5 py-3 animate-growHeight flex items-center justify-center flex-col overflow-hidden">
+          <div
+            className={`w-4 h-1 rounded-full animate-pulseLight mb-2
+              ${
+                showLight === true ? "block" : "hidden"
+              }
+             ${
+              statusColor === "green" ? "bg-green-500" : statusColor === "red" ? "bg-red-500" : "bg-white"
+            }`}
+          ></div>
+          <p className={`text-white font-semibold text-center opacity-0 animate-fadeIn ${showLight === true ? "block" : "hidden"}`}>{message}</p>
+        </div>
         <Toaster position="top-center" />
         <header className="flex flex-col items-center w-full h-full bg-[url('/background_pattern.png')] bg-cover bg-center p-10">
           <div className="w-full">

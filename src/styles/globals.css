@@ -123,3 +123,53 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes growHeight {
+    0% {
+      height: 1rem;
+    }
+    100% {
+      height: 5.25rem;
+    }
+  }
+  @keyframes pulseLight {
+    0%, 100% {
+      opacity: 0.3;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.5);
+    }
+  }
+  @keyframes fadeIn {
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes showPulse {
+    0% {
+      display: none;
+    }
+    100% {
+      display: block;
+    }
+  }
+
+  .animate-growHeight {
+    animation: growHeight 0.5s ease-out forwards;
+    animation-delay: 1s;
+  }
+  .animate-pulseLight {
+    animation: pulseLight 1s infinite;
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.5s ease-out forwards;
+    animation-delay: .3s;
+  }
+  .animate-showPulse {
+    animation: showPulse 0.5s ease-out forwards;
+    animation-delay: 1.3s;
+  }
+}
