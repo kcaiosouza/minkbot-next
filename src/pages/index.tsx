@@ -433,7 +433,7 @@ END:VCARD
                 <div className="mt-4">
                   <span className="text-white text-4xl font-black">
                     <small className="font-light text-white text-lg">R$</small>
-                    14
+                    9
                   </span>
                   <small className="font-light text-white text-lg">
                     ,99/mês
