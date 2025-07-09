@@ -272,6 +272,18 @@ END:VCARD
             Meus comandos
           </h2>
           <div className="mb-4 text-left w-full">
+            <p className="text-[#142F54] font-bold">🔊 YTA (NOVO)</p>
+            <p className="text-[#142F54]">
+              Comando:{" "}
+              <code className="bg-[#142F54da] text-white p-[1px] px-1 rounded italic">
+                -yta &lt;youtube link&gt;
+              </code>
+            </p>
+            <p className="text-[#142F54]">
+              O bot vai enviar o audio do link enviado para o grupo.
+            </p>
+          </div>
+          <div className="mb-4 text-left w-full">
             <p className="text-[#142F54] font-bold">🖼️ Figurinha</p>
             <p className="text-[#142F54]">
               Comando:{" "}
