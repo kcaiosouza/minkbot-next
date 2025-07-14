@@ -237,7 +237,7 @@ export default function Payment({ group }: GroupProps) {
                 <img src="/minkhead.png" alt="Minkbot Head" width={120} height={120} className='absolute top-0 -right-6 -translate-x-2 -translate-y-4' />
                 <div className='flex flex-col justify-center gap-6 p-4'>
                   <div className='bg-[#3B67A4] max-w-fit px-3 rounded-md'>
-                    <span className='font-bold text-white text-4xl'><span className='text-sm'>R$ </span>9,99</span>
+                    <span className='font-bold text-white text-4xl'><span className='text-sm'>R$ </span>4,90</span>
                   </div>
                   <span className='text-white text-3xl'><b>MinkBot</b> Premium</span>
                 </div>

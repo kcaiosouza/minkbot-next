@@ -445,10 +445,10 @@ END:VCARD
                 <div className="mt-4">
                   <span className="text-white text-4xl font-black">
                     <small className="font-light text-white text-lg">R$</small>
-                    9
+                    4
                   </span>
                   <small className="font-light text-white text-lg">
-                    ,99/mês
+                    ,90/mês
                   </small>
                 </div>
                 <div className="mt-4">
